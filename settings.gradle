@@ -1,0 +1,10 @@
+rootProject.name = 'jirasd'
+include ':jira-sd-interface'
+project(':jira-sd-interface').projectDir = file('components/services/interface')
+
+include ':jira-sd-implementation'
+project(':jira-sd-implementation').projectDir = file('components/services/implementation')
+
+include ':jira-sd-exceptions'
+project(':jira-sd-exceptions').projectDir = file('components/common/exceptions')
+

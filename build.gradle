@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+    id "com.avast.gradle.docker-compose" version "$avastDockerComposePluginVersion"
+}
+
+group = 'com.jira'
+version = '1'
+
+repositories {
+    mavenCentral()
+}
+
+dockerCompose {
+    useComposeFiles =['docker/docker-compose.yml']
+}

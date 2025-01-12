@@ -1,0 +1,45 @@
+services:
+  db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    image: platform/postgres
+    container_name: "db-postgres"
+    hostname: db
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d platform_jirasd"]
+      start_period: 5s
+      interval: 10s
+      timeout: 5s
+
+  jira:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    image: platform/jira
+    container_name: "jira"
+    hostname: jira
+    environment:
+      - DB_HOSTNAME=db
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: "pgadmin"
+    depends_on:
+      - db
+    ports:
+      - "127.0.0.1:5555:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
+volumes:
+  postgresql:
