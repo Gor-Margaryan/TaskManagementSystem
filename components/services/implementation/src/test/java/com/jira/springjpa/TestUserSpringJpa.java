@@ -51,6 +51,7 @@ public class TestUserSpringJpa {
     @Test
     void testCreateUser() {
         given(userRepository.save(any(UserEntity.class))).willReturn(userWithNonNullId);
+        given(passwordEncoder.encode(any(String.class))).willReturn(userWithNonNullId.getPassword());
         UserRequest user = userService.createUser(userWithNullId);
         assertEquals(user.getId(),userWithNonNullId.getId());
         assertEquals(user.getName(),userWithNonNullId.getName());
